@@ -1,36 +1,40 @@
-const { validationResult } = require('express-validator/check');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-
+const { body, validationResult } = require('express-validator/check');
+const authService = require('../service/auth');
 const User = require('../models/user');
 
 exports.signup = async (req, res, next) => {
+  try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const error = new Error('Validation failed.');
-      error.statusCode = 422;
       error.data = errors.array();
       throw error;
     }
-    const email = req.body.email;
-    const name = req.body.name;
-    const password = req.body.password;
-    const surname = req.body.surname;
-    try {
-      const hashedPw = await bcrypt.hash(password, 12);
-  
-      const user = new User({
-        email: email,
-        password: hashedPw,
-        name: name,
-        surname: surname
-      });
-      const result = await user.save();
-      res.status(201).json({ message: 'User created!', userId: result._id });
-    } catch (err) {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    }
-  };
+
+    const inputData = {
+      email: req.body.email,
+      name: req.body.name,
+      password: req.body.password,
+      surname: req.body.surname,
+      role: req.body.role
+    };
+
+    console.log(inputData)
+    const result = await authService.signup(inputData);
+    console.log("result", result)
+    res.json({ message: 'User created!', userId: result._id });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.login = async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    const response = await authService.loginUser(email, password);
+    res.json(response.data);
+  } catch (error) {
+    next(error);
+  }
+};
+

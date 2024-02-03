@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const rolesEnum = ['admin', 'user'];
+
 const userSchema = new Schema({
   name: {
     type: String,
@@ -12,7 +14,8 @@ const userSchema = new Schema({
   },
   email: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   password: {
     type: String,
@@ -20,10 +23,16 @@ const userSchema = new Schema({
   },
   nrOfReviews: {
     type: Number,
+    default: 0
+  },
+  role: {
+    type: String,
     required: true,
-    ref: 'Review',
+    enum: rolesEnum
   },
 },
-{ timestamps: true });
+  { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);
+
+

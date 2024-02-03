@@ -1,10 +1,3 @@
-// const http = require('http');
-
-// const server = http.createServer((req, res) => {
-//     console.log("Hello World!");
-// });
-
-// server.listen( 3000);
 const path = require('path');
 
 const express = require('express');
@@ -12,12 +5,11 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user');
+const reviewRoutes = require('./routes/review');
 
 const app = express();
 
-
-app.use(bodyParser.json()); //  middleware to parse incoming data application/json application/json
+app.use(bodyParser.json());
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -30,15 +22,14 @@ app.use((req, res, next) => {
 });
 
 app.use('/auth', authRoutes);
-app.use('/user', userRoutes);
+app.use('/review', reviewRoutes);
 app.use('/tick', (req, res) => res.status(200).send('tok'))
 
 app.use((error, req, res, next) => {
   console.log(error);
-  const status = error.statusCode || 500;
   const message = error.message;
   const data = error.data;
-  res.status(status).json({ message: message, data: data });
+  res.json({ message: message, data: data });
 });
 
 mongoose
