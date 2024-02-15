@@ -2,7 +2,7 @@ const { body, validationResult } = require('express-validator/check');
 const authService = require('../service/auth');
 const User = require('../models/user');
 
-exports.signup = async (req, res, next) => {
+exports.signup = async (req, res, next) => { //create user
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

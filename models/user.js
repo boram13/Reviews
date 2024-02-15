@@ -3,6 +3,28 @@ const Schema = mongoose.Schema;
 
 const rolesEnum = ['admin', 'user'];
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *         name:
+ *           type: string
+ *         surname:
+ *           type: string
+ *         role:
+ *           type: string
+ *       required:
+ *         - email
+ *         - name
+ *         - surname
+ *         - role
+ */
+
 const userSchema = new Schema({
   name: {
     type: String,

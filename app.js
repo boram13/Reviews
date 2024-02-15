@@ -6,6 +6,11 @@ const mongoose = require('mongoose');
 
 const authRoutes = require('./routes/auth');
 const reviewRoutes = require('./routes/review');
+const userRoutes = require('./routes/user');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerSpec = require('./swagger');
+const request = require('supertest');
 
 const app = express();
 
@@ -23,7 +28,9 @@ app.use((req, res, next) => {
 
 app.use('/auth', authRoutes);
 app.use('/review', reviewRoutes);
+app.use('/user', userRoutes);
 app.use('/tick', (req, res) => res.status(200).send('tok'))
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((error, req, res, next) => {
   console.log(error);
@@ -34,12 +41,13 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    'mongodb+srv://Boraa:BoraMenerja@cluster0.srxilpa.mongodb.net/messages?retryWrites=true'
-  )
+    'mongodb+srv://Boraa:BoraMenerja@cluster0.srxilpa.mongodb.net/messages?retryWrites=true'  )
   .then(() => {
     console.log('Mongodb connected')
-    app.listen(4000, () => {
+    app.listen(4004, () => {
       console.log('Started server on port :4000')
     });
   })
   .catch(err => console.log(err));
+
+  module.exports = app;
