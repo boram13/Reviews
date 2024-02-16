@@ -21,5 +21,5 @@ describe('UserService', () => {
       getAllUsersStub.restore();
     });
   });
- 
+
 });

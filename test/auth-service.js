@@ -13,7 +13,6 @@ describe('AuthService', () => {
         surname: 'User',
         role: 'user'
       };
-      // Stub the signup method
       const signupStub = sinon.stub(authService, 'signup').resolves({ _id: '123' });
 
       const result = await authService.signup(inputData);
