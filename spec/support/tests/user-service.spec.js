@@ -1,59 +1,72 @@
-const User = require('../models/user');
+const userService = require('../../../service/user');
+const User = require('../../../models/user');
 
-describe('User Controller', () => {
+describe('User Service', () => {
   describe('getAllUsers', () => {
     it('should return all users', async () => {
-      const mockUsers = [{ _id: 'user1' }, { _id: 'user2' }];
-      spyOn(User, 'find').and.returnValue(Promise.resolve(mockUsers));
+      const mockUsers = [{ name: 'Bora' }, { name: 'Nina' }];
+      spyOn(User, 'find').and.returnValue(mockUsers);
 
-      const result = await getAllUsers();
+      const result = await userService.getAllUsers();
 
+      expect(User.find).toHaveBeenCalled();
       expect(result).toEqual(mockUsers);
     });
 
-    it('should throw an error if could not fetch users', async () => {
-      spyOn(User, 'find').and.throwError('MongoDB connection error');
+    it('should throw an error if users cannot be fetched', async () => {
+      spyOn(User, 'find').and.throwError('Database error');
 
-      await expectAsync(getAllUsers()).toBeRejectedWithError('Could not fetch users');
+      try {
+        await userService.getAllUsers();
+      } catch (error) {
+        expect(error.message).toEqual('Could not fetch users');
+      }
     });
   });
 
   describe('updateUser', () => {
     it('should update a user', async () => {
-      const userId = 'user123';
-      const newData = { name: 'John Doe' };
-      const updatedUser = { _id: userId, ...newData, updateDate: new Date() };
-      spyOn(User, 'findByIdAndUpdate').and.returnValue(Promise.resolve(updatedUser));
+      const mockUser = { _id: 'user123', name: 'Boras' };
+      const newData = { name: 'Borana' };
+      spyOn(User, 'findByIdAndUpdate').and.returnValue(mockUser);
 
-      const result = await updateUser(userId, newData);
+      const result = await userService.updateUser('user123', newData);
 
-      expect(result).toEqual(updatedUser);
+      expect(User.findByIdAndUpdate).toHaveBeenCalledWith('user123', newData, { new: true });
+      expect(result).toEqual(mockUser);
     });
 
-    it('should throw an error if could not update user', async () => {
-      const userId = 'invalidUserId';
-      const newData = { name: 'John Doe' };
-      spyOn(User, 'findByIdAndUpdate').and.throwError('User update error');
+    it('should throw an error if user update fails', async () => {
+      const newData = { name: 'Borana' };
+      spyOn(User, 'findByIdAndUpdate').and.throwError('Database error');
 
-      await expectAsync(updateUser(userId, newData)).toBeRejectedWithError('Could not update user');
+      try {
+        await userService.updateUser('user123', newData);
+      } catch (error) {
+        expect(error.message).toEqual('Could not update user');
+      }
     });
   });
 
   describe('deleteUser', () => {
     it('should delete a user', async () => {
-      const userId = 'user123';
-      spyOn(User, 'findByIdAndDelete').and.returnValue(Promise.resolve({ _id: userId }));
+      const mockUser = { _id: 'user123', name: 'Boras' };
+      spyOn(User, 'findByIdAndDelete').and.returnValue(mockUser);
 
-      const result = await deleteUser(userId);
+      const result = await userService.deleteUser('user123');
 
-      expect(result).toEqual({ _id: userId });
+      expect(User.findByIdAndDelete).toHaveBeenCalledWith('user123');
+      expect(result).toEqual(mockUser);
     });
 
-    it('should throw an error if could not delete user', async () => {
-      const userId = 'invalidUserId';
-      spyOn(User, 'findByIdAndDelete').and.throwError('User delete error');
+    it('should throw an error if user deletion fails', async () => {
+      spyOn(User, 'findByIdAndDelete').and.throwError('Database error');
 
-      await expectAsync(deleteUser(userId)).toBeRejectedWithError('Could not delete user');
+      try {
+        await userService.deleteUser('user123');
+      } catch (error) {
+        expect(error.message).toEqual('Could not delete user');
+      }
     });
   });
 });

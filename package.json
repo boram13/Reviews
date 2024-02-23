@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "tests": "jasmine",
-    "single-test": "jasmine ./spec/support/tests/review-service.spec.js",
+    "single-test": "jasmine ./spec/support/tests/auth-controller.spec.js",
     "start": "nodemon app.js",
     "start-serve": "node app.js",
     "start:dev": "nodemon app.js"
