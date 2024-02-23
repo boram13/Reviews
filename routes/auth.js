@@ -16,7 +16,7 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/models/components/schemas/User' 
+ *             $ref: '#./models/components/schemas/User' 
  *     responses:
  *       200:
  *         description: User created successfully

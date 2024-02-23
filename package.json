@@ -5,6 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha",
+    "tests": "jasmine",
+    "single-test": "jasmine ./spec/support/tests/review-service.spec.js",
     "start": "nodemon app.js",
     "start-serve": "node app.js",
     "start:dev": "nodemon app.js"
@@ -21,6 +23,7 @@
     "express-handlebars": "3.0",
     "express-session": "^1.17.3",
     "express-validator": "^5.3.0",
+    "jasmine": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mocha": "^6.0.2",
     "mongodb": "^6.3.0",

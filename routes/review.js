@@ -34,7 +34,7 @@ const router = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/models/components/schemas/Review'
+ *               $ref: '#./models/components/schemas/Review'
  *       '500':
  *         description: Failed to create review
  */
@@ -73,7 +73,7 @@ router.post('', isAuth, reviewController.createReview);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Review'
+ *               $ref: '#.models/components/schemas/Review'
  *       '500':
  *         description: Failed to update review
  */
@@ -110,7 +110,7 @@ router.put(
  *             schema:
  *               type: array
  *               items:
- *               $ref: '#/models/components/schemas/Review'
+ *               $ref: '#/./models/components/schemas/Review'
  *       '500':
  *         description: Failed to retrieve reviews from the database.
  */

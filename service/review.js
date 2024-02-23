@@ -15,6 +15,7 @@ exports.createReview = async (userId, rate, description) => {
         await review.save({ session });
         await session.commitTransaction();
         session.endSession();
+        // await review.save()
         return review;
     } catch (error) {
         console.log(error)
