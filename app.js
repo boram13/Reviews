@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const authRoutes = require('./routes/auth');
 const reviewRoutes = require('./routes/review');
 const userRoutes = require('./routes/user');
+const eventRoutes = require('./routes/event');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerSpec = require('./swagger');
@@ -25,10 +26,11 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
-
+//integrate components
 app.use('/auth', authRoutes);
 app.use('/review', reviewRoutes);
 app.use('/user', userRoutes);
+app.use('/events', eventRoutes);
 app.use('/tick', (req, res) => res.status(200).send('tok'))
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
@@ -45,7 +47,7 @@ mongoose
   .then(() => {
     console.log('Mongodb connected')
     app.listen(4004, () => {
-      console.log('Started server on port :4000')
+      console.log('Started server on port :4004')
     });
   })
   .catch(err => console.log(err));

@@ -1,9 +1,7 @@
 const express = require('express');
 
 const reviewController = require('../controller/review');
-
 const isAuth = require('../middleware/is-auth');
-
 const isAdmin = require('../middleware/is-admin');
 const { body, param } = require('express-validator/check');
 

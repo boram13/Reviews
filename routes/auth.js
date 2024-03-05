@@ -37,21 +37,21 @@ const router = express.Router();
 
 router.put(
   '/sign-up',
-  // [
-  //   body('email')
-  //     .isEmail()
-  //     .withMessage('Please enter a valid email.')
-  //     .normalizeEmail(),
-  //   body('password')
-  //     .isString()
-  //     .isLength({ min: 5 }),
-  //   body('name')
-  //     .isString(),
-  //   body('surname')
-  //     .isString(),
-  //   body('role')
-  //   .isString()
-  // ],
+  [
+    body('email')
+      .isEmail()
+      .withMessage('Please enter a valid email.')
+      .normalizeEmail(),
+    body('password')
+      .isString()
+      .isLength({ min: 5 }),
+    body('name')
+      .isString(),
+    body('surname')
+      .isString(),
+    body('role')
+    .isString()
+  ],
   authController.signup
 );
 

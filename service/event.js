@@ -20,6 +20,18 @@ const saveEvent = async (userId, eventName, action) => {
   }
 };
 
+const getAllEvents =  async() => {
+
+  try{
+    const events = await UserEvent.find().exec();
+    return events;
+  }catch (error) {
+    throw new Error ('error getting the events from the database')
+  }
+  
+}
+
 module.exports = {
-  saveEvent,
+  getAllEvents,
+  saveEvent
 };

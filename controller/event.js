@@ -1,14 +1,11 @@
 const eventService = require('../service/event');
 
-exports.saveEvent = async(req,res) => {
-    const {userId, eventName,action } = req.body;
-
+exports.getAllEvents = async (req,res) => {
     try{
-        const savedEvent = await eventService.saveEvent(userId, eventName, action);
-        res.json(savedEvent);
-    }catch (error) {
-
-res.json({error: error.message});
-}
+        const events = await eventService.getAllEvents();
+        res.json(events);
+    }catch(error){
+        res.json('error hapend to get all the events');
+    }
 }
 
