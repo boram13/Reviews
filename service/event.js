@@ -20,18 +20,34 @@ const saveEvent = async (userId, eventName, action) => {
   }
 };
 
-const getAllEvents =  async() => {
+const getAllEvents =  async(page, limit) => {
 
   try{
-    const events = await UserEvent.find().exec();
+    const offset = (page - 1) * limit;
+    let events;
+    if(page ===1){
+      events = await UserEvent.find().limit(limit).exec();
+    }else{
+      events = await UserEvent.find().skip(0).limit(limit).exec();
+    }
     return events;
   }catch (error) {
-    throw new Error ('error getting the events from the database')
+    throw new Error (' can not get the events from the database');
+    
   }
-  
 }
+
+const getTotalEventCount = async () => {
+  try {
+      const count = await UserEvent.countDocuments();
+      return count;
+  } catch (error) {
+      throw new Error('Can not get total event');
+  }
+};
 
 module.exports = {
   getAllEvents,
-  saveEvent
+  saveEvent,
+  getTotalEventCount,
 };

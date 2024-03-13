@@ -18,15 +18,18 @@ exports.createReview = async (req, res, next) => {
 }
 
 exports.readAllReviews = async (req, res, next) => {
-const userId = req.body;
-  try {
-    const reviews = await reviewService.readAllReviews();
-    // await EventService.saveEvent(userId, "review", 'read')
-    res.json(reviews);
-    await EventService.saveEvent(userId, "review", 'read')
+const userId = req.user.userId;
+const page = parseInt(req.query.page) || 1;
+const limit = parseInt(req.query.limit) || 3;
 
+
+  try {
+    const { reviews, pagination }  = await reviewService.readAllReviews(page, limit);
+    console.log(req.user)
+    await EventService.saveEvent(userId, "review", 'read')
+    res.json({ reviews, pagination })
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.json({ message: error.message });
   }
 };
 

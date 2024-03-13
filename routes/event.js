@@ -2,7 +2,10 @@ const express = require('express');
 
 const router = express.Router();
 
+const { query } = require('express-validator/check');
+
 const eventController = require('../controller/event');
+const isAuth = require('../middleware/is-auth');
 
 /**
  * @swagger
@@ -22,7 +25,15 @@ const eventController = require('../controller/event');
  *       '500':
  *         description: Error
  */
-router.get('/events', eventController.getAllEvents);
- 
 
+router.get(
+    '/events',
+    isAuth,
+    [
+        query('page').isInt({ min: 1 }).withMessage('Page have to be a positive number!'),
+        query('limit').isInt({ min: 3, max: 100 }).withMessage('Limit should be number between 3 and 100')
+    ],
+    eventController.getAllEvents
+);
+ 
 module.exports = router;

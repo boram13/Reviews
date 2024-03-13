@@ -25,10 +25,20 @@ exports.createReview = async (userId, rate, description) => {
     }
 }
 
-exports.readAllReviews = async () => {
+exports.readAllReviews = async (page, limit) => {
     try {
-        const reviews = await Review.find();
-        return reviews;
+        const first = (page-1)*limit;
+        const last = page*limit;
+
+        const reviews = await Review.find().skip(first).limit(limit);
+        const total =  await Review.countDocuments();
+
+        const pagination = {
+            actualPage: page,
+            totalPage: Math.ceil(total / limit),
+            totalReviews: total
+        }
+        return {reviews, pagination };
     } catch (error) {
         throw new Error('Could not find any review!');
     }

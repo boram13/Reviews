@@ -3,7 +3,7 @@ const express = require('express');
 const reviewController = require('../controller/review');
 const isAuth = require('../middleware/is-auth');
 const isAdmin = require('../middleware/is-admin');
-const { body, param } = require('express-validator/check');
+const { query, body, param } = require('express-validator/check');
 
 const router = express.Router();
 
@@ -113,7 +113,13 @@ router.put(
  *         description: Failed to retrieve reviews from the database.
  */
 
-router.get('/', reviewController.readAllReviews);
+router.get('/',
+isAuth,
+[
+    query('page').optional().isInt({ min: 1 }).withMessage('Page have to be a positive number!'),
+    query('limit').optional().isInt({ min: 3, max: 100 }).withMessage('Limit should be number between 3 and 100')
+],
+reviewController.readAllReviews);
 
 router.delete('/:reviewId', isAuth, isAdmin, reviewController.deleteReview);
 
