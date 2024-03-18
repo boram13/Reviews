@@ -19,12 +19,13 @@ exports.createReview = async (req, res, next) => {
 
 exports.readAllReviews = async (req, res, next) => {
 const userId = req.user.userId;
-const page = parseInt(req.query.page) || 1;
-const limit = parseInt(req.query.limit) || 3;
+// const page = parseInt(req.query.page) || 1;
+// const limit = parseInt(req.query.limit) || 3;
+let { page, limit } = req.body;
 
 
   try {
-    const { reviews, pagination }  = await reviewService.readAllReviews(page, limit);
+    const { reviews, pagination }  = await reviewService.readAllReviews(page, limit, userId);
     console.log(req.user)
     await EventService.saveEvent(userId, "review", 'read')
     res.json({ reviews, pagination })

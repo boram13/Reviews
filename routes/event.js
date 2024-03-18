@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { query } = require('express-validator/check');
+const {  body , check } = require('express-validator/check');
 
 const eventController = require('../controller/event');
 const isAuth = require('../middleware/is-auth');
@@ -25,13 +25,17 @@ const isAuth = require('../middleware/is-auth');
  *       '500':
  *         description: Error
  */
+const isObject = value => {
+    return typeof value === 'object' && value !== null;
+};
 
-router.get(
-    '/events',
+router.post(
+    '/paginate',
     isAuth,
-    [
-        query('page').isInt({ min: 1 }).withMessage('Page have to be a positive number!'),
-        query('limit').isInt({ min: 3, max: 100 }).withMessage('Limit should be number between 3 and 100')
+    [   
+        check('paginate').optional().custom(isObject).withMessage('Pagination must be an object'),
+        body('page').optional().isInt({ min: 1 }).withMessage('Page have to be a positive number!'),
+        body('limit').optional().isInt({ max: 3 , max:10 }).withMessage('Limit should be number between 3 and 100')
     ],
     eventController.getAllEvents
 );

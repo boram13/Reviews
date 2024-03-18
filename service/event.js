@@ -20,22 +20,19 @@ const saveEvent = async (userId, eventName, action) => {
   }
 };
 
-const getAllEvents =  async(page, limit) => {
-
-  try{
+const getAllEvents = async (page, limit, sortField, sortOrder) => {
+  try {
     const offset = (page - 1) * limit;
-    let events;
-    if(page ===1){
-      events = await UserEvent.find().limit(limit).exec();
-    }else{
-      events = await UserEvent.find().skip(0).limit(limit).exec();
+    const sortOptions = {};
+    if (sortField && sortOrder) {
+      sortOptions[sortField] = sortOrder === 'asc' ? 1 : -1;
     }
+    const events = await UserEvent.find().sort(sortOptions).skip(offset).limit(limit).exec();
     return events;
-  }catch (error) {
-    throw new Error (' can not get the events from the database');
-    
+  } catch (error) {
+    throw new Error('Cannot get the events from the database');
   }
-}
+};
 
 const getTotalEventCount = async () => {
   try {
