@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const {  body , check } = require('express-validator/check');
+const { body, check } = require('express-validator/check');
 
 const eventController = require('../controller/event');
 const isAuth = require('../middleware/is-auth');
@@ -32,12 +32,19 @@ const isObject = value => {
 router.post(
     '/paginate',
     isAuth,
-    [   
+    [
         check('paginate').optional().custom(isObject).withMessage('Pagination must be an object'),
-        body('page').optional().isInt({ min: 1 }).withMessage('Page have to be a positive number!'),
-        body('limit').optional().isInt({ max: 3 , max:10 }).withMessage('Limit should be number between 3 and 100')
+        body('paginate.page').optional().isInt({ min: 1 }).withMessage('Page must be a positive number!'),
+        body('paginate.limit').optional().isInt({ min: 3, max: 10 }).withMessage('Limit should be a number between 3 and 10'),
+        check('sort').optional().custom(isObject).withMessage('Sort must be an object'),
+        body('sort.sortField').optional().isString().withMessage('Sort field should be a string'),
+        body('sort.sortOrder').optional().isIn(['asc', 'desc']).withMessage('Sort order should be "asc" or "desc"'),
+        check('filter').optional().custom(isObject).withMessage('Filter must be an object'),
+        body('filter.eventName').optional().isString().withMessage('Event name should be a string'),
+        body('filter.userId').optional().isString().withMessage('User ID should be a string'),
+        body('filter.action').optional().isString().withMessage('Action should be a string')
     ],
     eventController.getAllEvents
 );
- 
+
 module.exports = router;
