@@ -96,4 +96,6 @@ router.post(
   ],
   authController.login);
 
+router.get('/activate/:token', authController.activateUser);
+
 module.exports = router;

@@ -28,11 +28,14 @@
     "mocha": "^6.0.2",
     "mongodb": "^6.3.0",
     "mongoose": "^8.0.4",
+    "nodemailer": "^6.9.8",
+    "nodemailer-sendgrid-transport": "^0.2.0",
     "nodemon": "^1.18.4",
     "sinon": "^7.2.7"
   },
   "dependencies": {
     "chai-http": "^4.4.0",
+    "redis": "^4.6.13",
     "supertest": "^6.3.4",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"

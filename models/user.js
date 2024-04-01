@@ -52,6 +52,9 @@ const userSchema = new Schema({
     required: true,
     enum: rolesEnum
   },
+  verificationToken: { 
+    type: String
+   }
 },
   { timestamps: true });
 

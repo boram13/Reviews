@@ -4,6 +4,7 @@ const { validationResult } = require('express-validator/check');
 const EventService = require('../service/event')
 
 const reviewService = require('../service/review');
+const { nextTick } = require('process');
 
 exports.createReview = async (req, res, next) => {
   try {
@@ -12,8 +13,9 @@ exports.createReview = async (req, res, next) => {
     await EventService.saveEvent(userId, "review", 'create')
     res.status(201).json(review);
   } catch (error) {
-    console.log(error)
+    console.log("Error ocurred in createReview", error)
     res.status(500).json({ error: 'Failed to create review' });
+    next()
   }
 }
 

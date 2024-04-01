@@ -12,10 +12,12 @@ exports.createReview = async (userId, rate, description) => {
             insertDate: new Date()
         },
         );
-        await review.save({ session });
+        throw new Error('Something wrong ');
+
+        await review.save({ session });//problem
         await session.commitTransaction();
         session.endSession();
-        // await review.save()
+        await review.save()
         return review;
     } catch (error) {
         console.log(error)
@@ -23,6 +25,7 @@ exports.createReview = async (userId, rate, description) => {
         session.endSession();
         throw new Error('Failed to create review');
     }
+    // console.log("'''''")
 }
 
 exports.readAllReviews = async (page, limit) => {
