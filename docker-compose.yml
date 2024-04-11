@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  redis:
+    image: "redis:7.2.4-alpine3.19"
+    ports:
+      - "6379:6379"
+    networks:
+      - my-network
+  mongodb:
+    image: "mongo:7.0.7"
+    ports: 
+      - "27017:27017"
+    networks:
+      - my-network
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    ports:
+      - "4004:4004"
+    networks:
+      - my-network
+    volumes:
+      - ./REVIEWS
+
+networks:
+  my-network:
+    driver: bridge
+
+

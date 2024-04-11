@@ -40,21 +40,41 @@ app.use((error, req, res, next) => {
   res.json({ message: message, data: data });
 });
 
-mongoose
-  .connect(
-    'mongodb+srv://Boraa:BoraMenerja@cluster0.srxilpa.mongodb.net/messages?retryWrites=true'  )
-  .then(() => {
-    console.log('Mongodb connected')
-    return Cache.connect({
-      url: 'redis://@localhost:6379'
-    })
-    .then(() => {
-      console.log('Redis connected')
-      app.listen(4004, () => {
-        console.log('Started server on port :4004')
-      });
-    })
-  })
-  .catch(err => console.log(err));
+// mongoose
+//   .connect(
+//     'mongodb+srv://Boraa:BoraMenerja@cluster0.srxilpa.mongodb.net/messages?retryWrites=true'  )
+//   .then(() => {
+//     console.log('Mongodb connected')
+//     return Cache.connect({
+//       url: 'redis://@localhost:6379'
+//     })
+//     .then(() => {
+//       console.log('Redis connected')
+//       app.listen(4004, () => {
+//         console.log('Started server on port :4004')
+//       });
+//     })
+//   })
+//   .catch(err => console.log(err));
+
+console.log('asdasdasdasda')
+mongoose.connect('mongodb://mongodb:27017/messages')
+.then(() => {
+  console.log('MongoDB connected');
+  // return Cache.connect({
+  //   url: 'redis://redis:6379' 
+  // });
+  return Promise.resolve()
+})
+.then(() => {
+  console.log('Redis connected');
+  app.listen(4004, () => {
+    console.log('Server started on port: 4004');
+  });
+}).catch((err) => {
+  console.log('- - - - - - -')
+  console.error('Connection error:', err)
+});
+
 
 module.exports = app
