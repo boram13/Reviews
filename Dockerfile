@@ -1,13 +1,17 @@
 FROM node:18.18.2-alpine3.18
 
-WORKDIR /REVIEWS
 
-COPY package*.json ./
+# Create app directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
+# Install dependencies
+COPY package.json .
 RUN npm install
 
-COPY . .
+# Bundle app source
+COPY . ./
 
+# Exports
 EXPOSE 4004
-
-CMD [ "node", "app.js"]
+CMD [ "npm", "run", "start" ]

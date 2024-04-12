@@ -2,18 +2,21 @@ version: "3"
 
 services:
   redis:
+    container_name: redis
     image: "redis:7.2.4-alpine3.19"
     ports:
       - "6379:6379"
     networks:
       - my-network
   mongodb:
+    container_name: mongodb
     image: "mongo:7.0.7"
     ports: 
       - "27017:27017"
     networks:
       - my-network
   backend:
+    container_name: backend
     build:
       context: .
       dockerfile: Dockerfile 
@@ -22,7 +25,8 @@ services:
     networks:
       - my-network
     volumes:
-      - ./REVIEWS
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules # Remove this if you have pure JS dependencies
 
 networks:
   my-network:
