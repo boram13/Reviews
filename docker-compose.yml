@@ -26,10 +26,12 @@ services:
       - my-network
     volumes:
       - ./:/usr/src/app
-      - /usr/src/app/node_modules # Remove this if you have pure JS dependencies
+      - /usr/src/app/node_modules
+    environment:
+      DB_URL: mongodb://mongodb:27017/messages
+      REDIS_URL: redis://redis:6379
+      PORT: 4003
 
 networks:
   my-network:
     driver: bridge
-
-

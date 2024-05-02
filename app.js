@@ -3,15 +3,15 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+// const default = require('./confon');
+const config = require('config');
 
 const authRoutes = require('./routes/auth');
 const reviewRoutes = require('./routes/review');
 const userRoutes = require('./routes/user');
 const eventRoutes = require('./routes/event');
 const swaggerUi = require('swagger-ui-express');
-const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerSpec = require('./swagger');
-const request = require('supertest');
 const Cache = require('./service/cache');
 
 const app = express();
@@ -25,55 +25,45 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 //integrate components
 app.use('/auth', authRoutes);
 app.use('/review', reviewRoutes);
 app.use('/user', userRoutes);
 app.use('/events', eventRoutes);
-app.use('/tick', (req, res) => res.status(200).send('tok'))
+app.use('/tick', (req, res) => res.status(200).send('tok'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((error, req, res, next) => {
-  console.log("unhandled exception:", error);
+  console.error("Unhandled exception:", error);
   const message = error.message;
   const data = error.data;
-  res.json({ message: message, data: data });
+  res.status(500).json({ message: message, data: data });
 });
 
-// mongoose
-//   .connect(
-//     'mongodb+srv://Boraa:BoraMenerja@cluster0.srxilpa.mongodb.net/messages?retryWrites=true'  )
-//   .then(() => {
-//     console.log('Mongodb connected')
-//     return Cache.connect({
-//       url: 'redis://@localhost:6379'
-//     })
-//     .then(() => {
-//       console.log('Redis connected')
-//       app.listen(4004, () => {
-//         console.log('Started server on port :4004')
-//       });
-//     })
-//   })
-//   .catch(err => console.log(err));
-
 console.log('asdasdasdasda')
-mongoose.connect('mongodb://mongodb:27017/messages')
+
+mongoose.connect(config.get('db.url'))//getbd url dhe kthen nje string 
 .then(() => {
-  console.log('MongoDB connected');
-  // return Cache.connect({
-  //   url: 'redis://redis:6379' 
-  // });
-  return Promise.resolve()
+  console.log(`MongoDB connected`);
+  return Cache.connect({
+    url:config.get('redis.url')
+    // url: `redis://${config.get('redis.url')}:${config.get('redis.port')}`
+  });
 })
 .then(() => {
   console.log('Redis connected');
-  app.listen(4004, () => {
-    console.log('Server started on port: 4004');
+  app.listen(config.get('server.port'), () => {
+    console.log(`Server started on port: ${config.get('server.port')}`);
   });
-}).catch((err) => {
+})
+.catch((err) => {
   console.log('- - - - - - -')
   console.error('Connection error:', err)
+  process.exit(1)
 });
 
 

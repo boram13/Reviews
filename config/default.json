@@ -1,0 +1,11 @@
+{
+    "db": {
+      "url": "mongodb://localhost:27017/messages"
+    },
+    "redis": {
+      "url": "redis://localhost:6379"
+    },
+    "server": {
+      "port": 4002
+    }
+  }
